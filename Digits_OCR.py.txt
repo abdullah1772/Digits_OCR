@@ -1,0 +1,26 @@
+import easyocr
+import cv2
+import pandas as pd
+import os
+
+def extract_numbers_from_images(image_paths):
+    reader = easyocr.Reader(['en'], gpu=False)  # Initialize the EasyOCR reader
+    extracted_numbers = []
+
+    for path in image_paths:
+        img = cv2.imread(path)
+        results = reader.readtext(img)
+        numbers = ' '.join([res[1] for res in results if res[1].isdigit()])
+        extracted_numbers.append(numbers)
+
+    return extracted_numbers
+
+# Replace with the paths to your actual images
+entries = os.listdir("Path_to_your_folder)
+numbers = extract_numbers_from_images(entries)
+
+# Creating a DataFrame and saving it as an Excel file
+df = pd.DataFrame({'Image': image_paths, 'Extracted Numbers': numbers})
+df.to_excel('extracted_numbers.xlsx', index=False)
+
+print(df.head())  # Display the first few rows of the DataFrame
